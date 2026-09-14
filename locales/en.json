@@ -1,0 +1,72 @@
+{
+  "ui.app.name": "USB Waker",
+  "ui.title": "USB Waker",
+  "ui.lang.en": "English",
+  "ui.lang.zh-CN": "简体中文",
+
+  "ui.login.title": "Sign in · USB Waker",
+  "ui.login.subtitle": "Wanke Cloud · USB HID",
+  "ui.login.username": "Username",
+  "ui.login.password": "Password",
+  "ui.login.submit": "Sign in",
+  "ui.logout": "Sign out",
+
+  "ui.status.ready": "ready",
+  "ui.status.not_ready": "not ready",
+  "ui.status.udc": "USB link state",
+  "ui.status.udc_unknown": "unknown (/sys/class/udc not mounted)",
+  "ui.status.wakeup": "Remote wakeup signal",
+  "ui.status.wakeup.kernel": "kernel supports wakeup_on_write",
+  "ui.status.wakeup.rebind": "no kernel patch; falling back to UDC rebinding",
+  "ui.status.wakeup.none": "unsupported by kernel; signal mode degrades",
+
+  "ui.form.mode": "Wake mode",
+  "ui.form.key": "Key",
+  "ui.form.repeat": "Repeat",
+  "ui.form.submit": "Wake target device",
+
+  "ui.hint.key": ": sends a key report only. Best for sleep, a locked screen or a blanked display; the target must have \"Allow this device to wake the computer\" enabled in its BIOS or device manager.",
+  "ui.hint.signal": ": sends a wake signal without producing any keystroke.",
+  "ui.hint.both": ": signal first, then the key. Highest chance of success.",
+
+  "ui.flash.sent": "Sent: {steps}",
+  "ui.flash.failed": "Wake-up failed",
+
+  "mode.key": "Key only",
+  "mode.signal": "Signal only",
+  "mode.both": "Signal + key",
+
+  "step.wakeup_on_write": "remote wakeup signal",
+  "step.udc_rebind": "UDC rebind",
+  "step.zero_report": "empty report",
+  "step.key": "key {key} ×{repeat}",
+
+  "startup.missing_password": "Set either APP_PASSWORD or APP_PASSWORD_HASH.",
+  "startup.missing_secret": "SECRET_KEY must be set.",
+  "startup.bad_env_int": "{name} must be an integer (got {value}).",
+  "startup.bad_env_range": "{name} must be between {minimum} and {maximum} (got {value}).",
+  "startup.bad_mode": "WAKE_MODE must be one of key, signal or both (got {value}).",
+  "startup.bad_key": "WAKE_KEY is unusable: {error}",
+
+  "err.payload": "The request body must be a JSON object.",
+  "err.mode.invalid": "Invalid wake mode.",
+  "err.key.invalid": "Invalid key parameter (at most {maximum} characters).",
+  "err.csrf": "CSRF check failed. Refresh the page and try again.",
+  "err.login": "Wrong username or password",
+  "err.repeat.number": "The repeat count must be a number",
+  "err.repeat.range": "The repeat count must be between 1 and 5",
+  "err.key.empty": "No key specified",
+  "err.modifier.unknown": "Unknown modifier: {name}",
+  "err.key.unknown": "Unknown key: {name}",
+  "err.mode.unknown": "Unknown wake mode: {mode}",
+  "err.device.missing": "{device} does not exist; the gadget is not ready",
+  "err.device.open": "Failed to open {device}: {error}",
+  "err.device.disabled": "HID device unusable ({error}); the gadget was disabled by the host",
+  "err.device.write": "Failed to write to the HID device: {error}",
+  "err.report.length": "Failed to write to the HID device: short write",
+  "err.bus.suspended": "The bus is suspended, so the target is probably asleep. The report is queued and will be delivered once the host resumes.",
+
+  "warn.no_wakeup_patch": "The kernel has no f_hid wakeup_on_write patch, so no real remote wakeup signal can be sent; only an empty report was sent. The target may not wake up while it is off or hibernating.",
+  "warn.release_blocked": "The press report was queued, but the host never collected the release, so the target is very likely asleep. The key may still be held down after wake — click once more to reset it.",
+  "warn.press_blocked": "The HID queue still holds a report the host has not collected (the target is very likely asleep), so this key press could not be queued."
+}

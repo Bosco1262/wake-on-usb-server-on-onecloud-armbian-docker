@@ -1,0 +1,12 @@
+.git
+.env
+.commandcode
+host
+tests
+__pycache__
+*.py[cod]
+.pytest_cache
+README.md
+README.zh-CN.md
+LICENSE
+requirements-dev.txt

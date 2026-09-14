@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ t("ui.login.title") }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="center">
+  <form class="card login" method="post" action="{{ url_for('login') }}">
+    <h1>{{ t("ui.app.name") }}</h1>
+    <p class="sub">{{ t("ui.login.subtitle") }}</p>
+    <nav class="langs">
+      {% for code in languages %}
+      <a href="{{ url_for('login', lang=code) }}"{% if code == lang %} class="active"{% endif %}>{{ t("ui.lang." + code) }}</a>
+      {% endfor %}
+    </nav>
+    {% if error %}<p class="msg error">{{ error }}</p>{% endif %}
+    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+    <label>{{ t("ui.login.username") }}
+      <input name="username" autocomplete="username" required autofocus>
+    </label>
+    <label>{{ t("ui.login.password") }}
+      <input type="password" name="password" autocomplete="current-password" required>
+    </label>
+    <button type="submit">{{ t("ui.login.submit") }}</button>
+  </form>
+</body>
+</html>

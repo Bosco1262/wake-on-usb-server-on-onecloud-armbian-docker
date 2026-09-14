@@ -1,0 +1,72 @@
+{
+  "ui.app.name": "USB 唤醒器",
+  "ui.title": "USB 唤醒器",
+  "ui.lang.en": "English",
+  "ui.lang.zh-CN": "简体中文",
+
+  "ui.login.title": "登录 · USB 唤醒器",
+  "ui.login.subtitle": "玩客云 · USB HID",
+  "ui.login.username": "用户名",
+  "ui.login.password": "密码",
+  "ui.login.submit": "登录",
+  "ui.logout": "退出",
+
+  "ui.status.ready": "就绪",
+  "ui.status.not_ready": "未就绪",
+  "ui.status.udc": "USB 链路状态",
+  "ui.status.udc_unknown": "未知（未挂载 /sys/class/udc）",
+  "ui.status.wakeup": "远程唤醒信号",
+  "ui.status.wakeup.kernel": "内核支持 wakeup_on_write",
+  "ui.status.wakeup.rebind": "未打补丁，改用 UDC 重绑定",
+  "ui.status.wakeup.none": "内核不支持，signal 模式将降级",
+
+  "ui.form.mode": "唤醒方式",
+  "ui.form.key": "按键",
+  "ui.form.repeat": "重复次数",
+  "ui.form.submit": "唤醒目标设备",
+
+  "ui.hint.key": "：适合睡眠 / 锁屏 / 息屏，目标机需在 BIOS 或设备管理器里开启「允许此设备唤醒计算机」。",
+  "ui.hint.signal": "：不产生任何按键，只发唤醒信号。",
+  "ui.hint.both": "：先信号后按键，唤醒成功率最高。",
+
+  "ui.flash.sent": "已发送：{steps}",
+  "ui.flash.failed": "唤醒失败",
+
+  "mode.key": "仅按键",
+  "mode.signal": "仅唤醒信号",
+  "mode.both": "唤醒信号 + 按键",
+
+  "step.wakeup_on_write": "远程唤醒信号",
+  "step.udc_rebind": "UDC 重绑定",
+  "step.zero_report": "空报文",
+  "step.key": "按键 {key} ×{repeat}",
+
+  "startup.missing_password": "必须设置 APP_PASSWORD 或 APP_PASSWORD_HASH",
+  "startup.missing_secret": "必须设置 SECRET_KEY",
+  "startup.bad_env_int": "{name} 必须是整数（当前为 {value}）",
+  "startup.bad_env_range": "{name} 必须在 {minimum} 到 {maximum} 之间（当前为 {value}）",
+  "startup.bad_mode": "WAKE_MODE 只能是 key、signal 或 both（当前为 {value}）",
+  "startup.bad_key": "WAKE_KEY 不可用：{error}",
+
+  "err.payload": "请求体必须是 JSON 对象",
+  "err.mode.invalid": "唤醒方式不合法",
+  "err.key.invalid": "按键参数不合法（最多 {maximum} 个字符）",
+  "err.csrf": "CSRF 校验失败，请刷新页面后重试",
+  "err.login": "用户名或密码错误",
+  "err.repeat.number": "重复次数必须是数字",
+  "err.repeat.range": "重复次数需在 1-5 之间",
+  "err.key.empty": "未指定按键",
+  "err.modifier.unknown": "未知修饰键: {name}",
+  "err.key.unknown": "未知按键: {name}",
+  "err.mode.unknown": "未知唤醒模式: {mode}",
+  "err.device.missing": "{device} 不存在，gadget 未就绪",
+  "err.device.open": "打开 {device} 失败: {error}",
+  "err.device.disabled": "HID 设备不可用（{error}），gadget 已被主机禁用",
+  "err.device.write": "写入 HID 设备失败: {error}",
+  "err.report.length": "写入 HID 设备失败：写入长度不符",
+  "err.bus.suspended": "总线处于挂起状态，目标机可能正在睡眠；报文已排队，将在主机恢复后送达。",
+
+  "warn.no_wakeup_patch": "内核没有 f_hid 的 wakeup_on_write 补丁，无法发出真正的远程唤醒信号，已仅发送空报文。目标机处于关机/休眠状态时可能无法唤醒。",
+  "warn.release_blocked": "按下报文已排队，但主机没有来取释放报文，目标机很可能正在睡眠。唤醒后按键可能仍处于按下状态，再点一次即可复位。",
+  "warn.press_blocked": "HID 队列里还有未被主机取走的报文（目标机很可能正在睡眠），本次按键未能排队。"
+}

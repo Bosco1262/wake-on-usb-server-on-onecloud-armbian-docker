@@ -1,0 +1,17 @@
+[Unit]
+Description=USB HID wake gadget (Wanke Cloud)
+Documentation=file:///usr/local/sbin/setup-hid-gadget.sh
+After=local-fs.target
+# Critical: docker compose cannot start the container while /dev/hidg0 is missing.
+#
+# 关键：/dev/hidg0 不存在时 docker compose 无法启动容器
+Before=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/setup-hid-gadget.sh
+ExecStop=/usr/local/sbin/teardown-hid-gadget.sh
+
+[Install]
+WantedBy=multi-user.target

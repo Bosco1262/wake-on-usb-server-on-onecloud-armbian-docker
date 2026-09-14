@@ -1,0 +1,25 @@
+services:
+  hid-wake:
+    build: .
+    container_name: hid-wake
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8080:8080"
+    devices:
+      # Required: created by host/setup-hid-gadget.sh. The container cannot
+      # start without it.
+      #
+      # 必需：由宿主机 host/setup-hid-gadget.sh 创建，不存在则容器无法启动
+      - "/dev/hidg0:/dev/hidg0"
+    volumes:
+      # Optional: only used to show the USB link state in the web UI. It
+      # degrades to "unknown" when missing.
+      #
+      # 可选：仅用于页面显示 USB 链路状态，缺失时自动降级为「未知」
+      - "/sys/class/udc:/sys/class/udc:ro"
+      # Uncomment only when ENABLE_UDC_REBIND=1 in .env, for UDC rebinding in
+      # signal mode.
+      #
+      # 仅当 .env 里 ENABLE_UDC_REBIND=1 时取消注释，用于 signal 模式的 UDC 重绑定
+      # - "/sys/kernel/config:/sys/kernel/config:rw"

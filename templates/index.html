@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ t("ui.title") }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>{{ t("ui.app.name") }}</h1>
+      <div class="header-right">
+        <nav class="langs">
+          {% for code in languages %}
+          <a href="{{ url_for('index', lang=code) }}"{% if code == lang %} class="active"{% endif %}>{{ t("ui.lang." + code) }}</a>
+          {% endfor %}
+        </nav>
+        <form method="post" action="{{ url_for('logout') }}">
+          <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+          <button class="ghost" type="submit">{{ t("ui.logout") }}</button>
+        </form>
+      </div>
+    </header>
+
+    <section class="card status">
+      <div class="line">
+        <span class="dot {{ 'on' if device_ready else 'off' }}"></span>
+        <strong>{{ device }}</strong>
+        <span class="sub">{{ t("ui.status.ready") if device_ready else t("ui.status.not_ready") }}</span>
+      </div>
+      <div class="grid">
+        <div>
+          <p class="k">{{ t("ui.status.udc") }}</p>
+          <p class="v">{{ udc_state or t("ui.status.udc_unknown") }}</p>
+        </div>
+        <div>
+          <p class="k">{{ t("ui.status.wakeup") }}</p>
+          <p class="v">
+            {% if wakeup_supported %}{{ t("ui.status.wakeup.kernel") }}
+            {% elif rebind_enabled %}{{ t("ui.status.wakeup.rebind") }}
+            {% else %}{{ t("ui.status.wakeup.none") }}{% endif %}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    {% if last %}
+    <p class="msg {{ 'ok' if last.ok else 'error' }}">{{ last.message }}</p>
+    {% endif %}
+
+    <form class="card" method="post" action="{{ url_for('wake_form') }}">
+      <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+      <label>{{ t("ui.form.mode") }}
+        <select name="mode">
+          {% for mode in modes %}
+          <option value="{{ mode }}"{% if mode == default_mode %} selected{% endif %}>{{ t("mode." + mode) }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>{{ t("ui.form.key") }}
+        <select name="key">
+          {% for item in keys %}
+          <option value="{{ item }}"{% if item == default_key %} selected{% endif %}>{{ item }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>{{ t("ui.form.repeat") }}
+        <input type="number" name="repeat" value="{{ default_repeat }}" min="1" max="5">
+      </label>
+      <button type="submit">{{ t("ui.form.submit") }}</button>
+    </form>
+
+    <p class="hint">
+      <strong>{{ t("mode.key") }}</strong>{{ t("ui.hint.key") }}<br>
+      <strong>{{ t("mode.signal") }}</strong>{{ t("ui.hint.signal") }}<br>
+      <strong>{{ t("mode.both") }}</strong>{{ t("ui.hint.both") }}
+    </p>
+  </div>
+</body>
+</html>
