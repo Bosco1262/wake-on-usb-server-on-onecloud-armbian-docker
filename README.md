@@ -1,8 +1,8 @@
-# Wanke Cloud USB HID Web Waker
+# wake-on-usb-server-on-onecloud-armbian-docker
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-A minimal Docker service running on an Armbian-powered Wanke Cloud (OneCloud). Click a button on a web page and it wakes another machine over USB OTG by emulating a USB keyboard.
+A minimal Docker service running on an Armbian-powered OneCloud. Click a button on a web page and it wakes another machine over USB OTG by emulating a USB keyboard.
 
 ```
 Browser ──HTTP──> container (Flask) ──reports──> /dev/hidg0 ──USB OTG──> target machine
@@ -10,10 +10,10 @@ Browser ──HTTP──> container (Flask) ──reports──> /dev/hidg0 ─�
 
 ## Hardware
 
-| Item | Notes |
-|---|---|
-| Wanke Cloud | with Armbian installed |
-| Cable | see "Cable selection" below |
+| Item       | Notes                                                                                                            |
+| ---------- | ---------------------------------------------------------------------------------------------------------------- |
+| OneCloud   | with Armbian installed                                                                                           |
+| Cable      | see "Cable selection" below                                                                                      |
 | Which port | **the USB port next to the HDMI** is the OTG (device mode) port; the one next to the network jack is a host port |
 
 ### Cable selection
@@ -111,11 +111,11 @@ Open `http://<wanke-cloud-ip>:8080` in a browser and log in with the credentials
 
 ## The three wake modes
 
-| Mode | Behaviour | When to use |
-|---|---|---|
-| Key only | sends a key report only | sleep / lock screen / screen off — most reliable |
-| Signal only | sends a wake signal, no keystroke at all | when you want to wake it without leaving input behind |
-| Signal + key | signal first, then the key | default, highest chance of success |
+| Mode         | Behaviour                                | When to use                                           |
+| ------------ | ---------------------------------------- | ----------------------------------------------------- |
+| Key only     | sends a key report only                  | sleep / lock screen / screen off — most reliable      |
+| Signal only  | sends a wake signal, no keystroke at all | when you want to wake it without leaving input behind |
+| Signal + key | signal first, then the key               | default, highest chance of success                    |
 
 You can also set defaults in `.env` (`WAKE_MODE` / `WAKE_KEY` / `WAKE_REPEAT`); the choice in the web UI only affects the current request.
 
@@ -166,16 +166,16 @@ Responses echo the resolved language as `lang`, and both `steps` and `warnings` 
 
 ## Verification checklist
 
-| Layer | Command | Expected |
-|---|---|---|
-| Kernel | `ls /sys/class/udc/` | one entry |
-| Gadget | `cat /sys/class/udc/*/state` | `configured` while the target is on |
-| Gadget | `ls -l /dev/hidg0` | character device exists |
-| Hardware | `sudo /usr/local/sbin/verify-hid.sh` | target receives one Enter |
-| Container | `docker compose ps` / `docker compose logs` | running, no traceback |
-| Auth | log in with a wrong password | error shown, nothing leaked |
-| Function | click "Wake target device" in the UI | target wakes up |
-| Degradation | click after unplugging the A-to-A cable | page explains why (failure or "bus suspended"), service does not crash |
+| Layer       | Command                                     | Expected                                                               |
+| ----------- | ------------------------------------------- | ---------------------------------------------------------------------- |
+| Kernel      | `ls /sys/class/udc/`                        | one entry                                                              |
+| Gadget      | `cat /sys/class/udc/*/state`                | `configured` while the target is on                                    |
+| Gadget      | `ls -l /dev/hidg0`                          | character device exists                                                |
+| Hardware    | `sudo /usr/local/sbin/verify-hid.sh`        | target receives one Enter                                              |
+| Container   | `docker compose ps` / `docker compose logs` | running, no traceback                                                  |
+| Auth        | log in with a wrong password                | error shown, nothing leaked                                            |
+| Function    | click "Wake target device" in the UI        | target wakes up                                                        |
+| Degradation | click after unplugging the A-to-A cable     | page explains why (failure or "bus suspended"), service does not crash |
 
 ## Known limitations
 
@@ -210,17 +210,17 @@ LICENSE                     MIT
 
 ## Troubleshooting
 
-| Symptom | Cause / fix |
-|---|---|
-| Container will not start, `/dev/hidg0` not found | the gadget is not bound. Check `systemctl status hid-gadget`, or run the setup script by hand |
-| Setup script reports `/sys/class/udc/ 为空` | dwc2 is not in peripheral mode, see "Step 0" |
-| `cat /sys/class/udc/*/state` stays at `not attached` | the cable is in a plain host port (use **the one next to the HDMI**); or it is a charge-only cable with no D+/D-; or you cut VCC and this port needs VBUS to establish the session |
-| Target has a USB-C port and an A-to-C cable does nothing | the roles are reversed: an A-to-C cable makes the target's C port a device. Use a **C-male to A-female OTG adapter**, see "Cable selection" |
-| The adapter is connected but the keyboard is still not recognised | the adapter may have no Rd, or a resistor on only one CC pin. Flip the C plug over and retry |
-| Web UI returns 503 "HID device unusable (…)" | target powered off, A-to-A cable not seated, or it just went through a bus reset — retry in a moment |
-| Message "the target is very likely asleep" | normal, not a failure: once the bus is suspended the host stops polling the endpoint, so the report cannot be collected. The press report is still queued, and the key stays held after wake — **click once more to reset it** |
-| The UI shows "unknown" for the USB link state | `/sys/class/udc` is not mounted; wake-up still works |
-| Binding fails with too few endpoints | add `echo 1 > functions/hid.usb0/no_out_endpoint` to the setup script to drop the OUT endpoint |
+| Symptom                                                           | Cause / fix                                                                                                                                                                                                                    |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Container will not start, `/dev/hidg0` not found                  | the gadget is not bound. Check `systemctl status hid-gadget`, or run the setup script by hand                                                                                                                                  |
+| Setup script reports `/sys/class/udc/ 为空`                       | dwc2 is not in peripheral mode, see "Step 0"                                                                                                                                                                                   |
+| `cat /sys/class/udc/*/state` stays at `not attached`              | the cable is in a plain host port (use **the one next to the HDMI**); or it is a charge-only cable with no D+/D-; or you cut VCC and this port needs VBUS to establish the session                                             |
+| Target has a USB-C port and an A-to-C cable does nothing          | the roles are reversed: an A-to-C cable makes the target's C port a device. Use a **C-male to A-female OTG adapter**, see "Cable selection"                                                                                    |
+| The adapter is connected but the keyboard is still not recognised | the adapter may have no Rd, or a resistor on only one CC pin. Flip the C plug over and retry                                                                                                                                   |
+| Web UI returns 503 "HID device unusable (…)"                      | target powered off, A-to-A cable not seated, or it just went through a bus reset — retry in a moment                                                                                                                           |
+| Message "the target is very likely asleep"                        | normal, not a failure: once the bus is suspended the host stops polling the endpoint, so the report cannot be collected. The press report is still queued, and the key stays held after wake — **click once more to reset it** |
+| The UI shows "unknown" for the USB link state                     | `/sys/class/udc` is not mounted; wake-up still works                                                                                                                                                                           |
+| Binding fails with too few endpoints                              | add `echo 1 > functions/hid.usb0/no_out_endpoint` to the setup script to drop the OUT endpoint                                                                                                                                 |
 
 ## Testing
 
